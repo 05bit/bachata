@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bachata Example</title>
+</head>
+<body>
+
+<table width="100%">
+    <tbody>
+        <tr>
+            <th width="50%">
+                Chat 1
+            </th>
+            <th width="50%">
+                Chat 2
+            </th>
+        </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    var ws = new WebSocket("ws://127.0.0.1:8000/messages?channel=test");
+
+    ws.onopen = function() {
+        console.log("Connection opened...");
+    };
+
+    ws.onclose = function() {
+        console.log("Connection closed...");
+    };
+
+    ws.onmessage = function(evt) {
+        console.log("Message received: " + evt.data);
+    };
+</script>
+
+</body>
+</html>
