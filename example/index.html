@@ -2,6 +2,14 @@
 <html>
 <head>
     <title>Bachata Example</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <style type="text/css">
+      .disconnect {
+        display: block;
+        padding-bottom: 1em;
+      }
+    </style>
 </head>
 <body>
 
@@ -15,23 +23,143 @@
                 Chat 2
             </th>
         </tr>
+        <tr>
+          <td>
+            <div class="chat">
+              <form class="connect_form">
+                Start chat as:
+                <input type="text" name="user" placeholder="Login">
+                <button>Connect</button>
+              </form>
+              <form class="message" style="display:none;">
+                <input type="text" name="dest" placeholder="To user">
+                <br>
+                <textarea name="text"></textarea>
+                <br>
+                <button>Send</button>
+              </form>
+            </div>
+          </td>
+          <td>
+            <div class="chat">
+              <form class="connect_form">
+                Start chat as:
+                <input type="text" name="user" placeholder="Login">
+                <button>Connect</button>
+              </form>
+              <form class="message" style="display:none;">
+                <input type="text" name="dest" placeholder="To user">
+                <br>
+                <textarea name="text"></textarea>
+                <br>
+                <button>Send</button>
+              </form>
+            </div>
+          </td>
+        </tr>
     </tbody>
 </table>
 
 <script type="text/javascript">
-    var ws = new WebSocket("ws://127.0.0.1:8000/messages?channel=test");
+  function startChat(el)
+  {
+    var form = el.find('.connect_form');
+    var message_form = el.find('.message');
+    var user = form.find('[name=user]').val();
+    var ws = null;
+
+    form.hide();
+    
+    message_form.show();
+
+    el.prepend('<a href="#" class="disconnect">Disconnect ' + user + '</a>')
+      .on('click', '.disconnect', function(e) {
+        form.show();
+        message_form.hide();
+        ws.close();
+        $(this).remove();
+    });
+
+    message_form.find('button').on('click', function(e) {
+      e.preventDefault();
+
+      var dest = message_form.find('[name=dest]').val();
+      var text = message_form.find('[name=text]').val();
+
+      if (dest && text)
+      {
+        message_form.find('[name=text]').val("");
+
+        addChatMessage(message_form, user, text);
+
+        ws.send(JSON.stringify({
+          id: uuid4(),
+          type: 'text',
+          dest: dest,
+          data: text,
+        }));
+      } else {
+        alert("Please enter message text and to user!");
+      }
+    });
+
+    ws = connectAsUser(user, {
+      onmessage: function(data) {
+        console.log(data.type);
+        if (data.type == 'text') {
+          addChatMessage(message_form, data.from, data.data);
+        }
+      }
+    });
+  }
+
+  function addChatMessage(el, from, text)
+  {
+    el.before("<p>" + from + ": " + text + "</p>");
+  }
+
+  function connectAsUser(user, opts)
+  {
+    var ws = new WebSocket("ws://127.0.0.1:8000/messages?channel=" + user);
 
     ws.onopen = function() {
         console.log("Connection opened...");
+        if (opts.onopen) {
+          opts.onopen();
+        }
     };
 
     ws.onclose = function() {
         console.log("Connection closed...");
+        if (opts.onclose) {
+          opts.onclose();
+        }
     };
 
     ws.onmessage = function(evt) {
-        console.log("Message received: " + evt.data);
+        console.log("Message received: ", evt.data);
+        if (opts.onmessage) {
+          opts.onmessage(JSON.parse(evt.data));
+        }
     };
+
+    return ws;
+  }
+
+  function uuid4()
+  {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+  }
+
+  $(function () {
+    $('.connect_form button').on('click', function(e) {
+      e.preventDefault();
+      startChat($(this).closest('.chat'));
+    });
+  });
 </script>
 
 </body>

@@ -14,7 +14,7 @@ APP_HOST = ('127.0.0.1', 8000)
 REDIS_HOST = ('127.0.0.1', 6379)
 REDIS_DB = 0
 
-# Note 1: we have to setup Tornado to asyncio bridge
+# Note 1: we have to setup Tornado-asyncio bridge
 from tornado.ioloop import IOLoop
 IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
 
@@ -40,7 +40,7 @@ class Application(tornado.web.Application):
             loop=self.loop,
             conn_params={'address': REDIS_HOST, 'db': REDIS_DB},
             reliable=True)
-        self.messages.add_route(bachata.DirectRoute())
+        self.messages.add_route(SimpleRoute())
         yield from self.messages.init()
 
 
@@ -65,6 +65,16 @@ class MessagesHandler(bachata.tornado.MessagesHandler):
     def on_close(self):
         super().on_close()
         log.debug("Chat closed: %s", self._channel)
+
+
+class SimpleRoute(bachata.BaseRoute):
+    @asyncio.coroutine
+    def process(self, message, websocket=None, proto=None):
+        if 'dest' in message:
+            log.debug(message)
+            if websocket:
+                message['from'] = websocket.get_channel()
+            return message['dest']
 
 
 if __name__ == '__main__':
