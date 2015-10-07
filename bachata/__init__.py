@@ -1,13 +1,16 @@
-"""Generic WebSocket chat on asyncio.
+"""**Bachata** is a simple chats engine and toolkit on top
+of [asyncio](https://docs.python.org/3.4/library/asyncio.html) and
+[Tornado](http://www.tornadoweb.org/en/stable/).
 
 Overview
 --------
 
 - Requires Python 3.3+
-- Simple custom routing programming
-- Supports Tornado running on asyncio event loop
+- Requires Tornado running on asyncio event loop
 - Implements simple messages queue on Redis LPUSH / BRPOP
 - Implements reliable messages delivery on Redis BRPOPLPUSH pattern
+- JSON messages format
+- Custom messages routing
 
 """
 __version__ = '0.1'
