@@ -1,6 +1,8 @@
 """**Bachata** is a simple chats engine and toolkit on top
-of [asyncio](https://docs.python.org/3.4/library/asyncio.html) and
-[Tornado](http://www.tornadoweb.org/en/stable/).
+of `asyncio`_ and `Tornado`_.
+
+.. _Tornado: http://www.tornadoweb.org/en/stable/
+.. _asyncio: https://docs.python.org/3.4/library/asyncio.html
 
 Overview
 --------
