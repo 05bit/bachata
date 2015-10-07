@@ -20,7 +20,7 @@ setup(
         'aioredis>=0.2.3',
         'websockets>=2.6',
     ),
-    py_modules=[
+    packages=[
         'bachata',
     ],
     classifiers=[
