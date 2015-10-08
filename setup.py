@@ -1,6 +1,3 @@
-"""
-Toolkit for chats on top of asyncio and Tornado.
-"""
 from setuptools import setup
 import bachata
 
@@ -12,14 +9,14 @@ setup(
     author="Alexey Kinev",
     author_email='rudy@05bit.com',
     url='https://github.com/05bit/bachata',
-    description=__doc__,
+    description=bachata.__doc__.split('\n')[0],
     license='Apache',
     zip_safe=False,
-    install_requires=(
+    install_requires=[
         'tornado>=4.2.1',
         'aioredis>=0.2.3',
         'websockets>=2.6',
-    ),
+    ],
     packages=[
         'bachata',
     ],

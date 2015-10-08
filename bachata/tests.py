@@ -96,7 +96,9 @@ if tornado:
                     self.io_loop.add_callback(stop_with_error, e)
 
                 yield from self._app.done()
-                
+
+                yield from asyncio.sleep(0.1, loop=self.loop)
+
                 self.stop(result)
 
             self.loop.create_task(run_async())
