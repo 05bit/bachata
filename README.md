@@ -1,6 +1,6 @@
 **Bachata** is a chat server toolkit on top of [asyncio](https://docs.python.org/3.4/library/asyncio.html) and [Tornado](http://www.tornadoweb.org/en/stable/).
 
-![ReadTheDocs badge][readthedocs]
+[![ReadTheDocs badge][readthedocs]](http://bachata.readthedocs.org/en/latest/)
 
 [readthedocs]: https://readthedocs.org/projects/bachata/badge/?version=latest
 
