@@ -9,7 +9,8 @@ setup(
     author="Alexey Kinev",
     author_email='rudy@05bit.com',
     url='https://github.com/05bit/bachata',
-    description=bachata.__doc__.split('\n')[0],
+    description="Bachata is a chat server toolkit on top of asyncio and Tornado.",
+    long_description=bachata.__doc__,
     license='Apache',
     zip_safe=False,
     install_requires=[
