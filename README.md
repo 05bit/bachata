@@ -1,5 +1,9 @@
 **Bachata** is a chat server toolkit on top of [asyncio](https://docs.python.org/3.4/library/asyncio.html) and [Tornado](http://www.tornadoweb.org/en/stable/).
 
+![ReadTheDocs badge][readthedocs]
+
+[readthedocs]: https://readthedocs.org/projects/bachata/badge/?version=latest
+
 - Requires Python 3.3+
 - Requires Tornado running on asyncio event loop
 - Implements simple messages queue on Redis LPUSH / BRPOP
