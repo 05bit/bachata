@@ -138,8 +138,18 @@
 
     ws.onmessage = function(evt) {
         console.log("Message received: ", evt.data);
-        if (opts.onmessage) {
-          opts.onmessage(JSON.parse(evt.data));
+
+        var message = JSON.parse(evt.data);
+
+        if (message && opts.onmessage) {
+          opts.onmessage(message);
+        }
+
+        if (message && message.id) {
+          ws.send(JSON.stringify({
+            type: 200, // GOT IT
+            data: message.id
+          }));
         }
     };
 
