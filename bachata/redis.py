@@ -1,6 +1,9 @@
 import asyncio
 import aioredis
+import logging
 from . import base
+
+log = logging.getLogger(__name__)
 
 
 class RedisMessagesCenter(base.BaseMessagesCenter):
@@ -112,6 +115,7 @@ class RedisQueue(base.BaseQueue):
 
         while True:
             val = yield from redis_conn.brpop(channel, timeout=10)
+            log.debug("listen_queue: %s" % val)
             if websocket.is_closed:
                 redis_conn.close()
                 return
@@ -225,6 +229,8 @@ class ReliableRedisQueue(RedisQueue):
         while True:
             raw = yield from redis_conn.brpoplpush(
                 channel, wait_queue)
+
+            log.debug("listen_queue: %s" % raw)
 
             if not raw:
                 continue

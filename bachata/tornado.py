@@ -59,9 +59,14 @@ class MessagesHandler(tornado.websocket.WebSocketHandler):
         self.get_messages_center().del_socket(self.get_channel(), self)
 
     def on_message(self, raw_message):
-        """Process message to messages center."""
+        """Process message to messages center.
+        """
+        if isinstance(raw_message, bytes):
+            str_message = raw_message.decode('utf-8')
+        else:
+            str_message = raw_message
         self.loop.create_task(
-            self.get_messages_center().process(raw_message, self))
+            self.get_messages_center().process(str_message, self))
 
     def on_auth_error(self):
         """Close connection on authorization error."""
