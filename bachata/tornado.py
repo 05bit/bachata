@@ -40,6 +40,7 @@ class MessagesHandler(tornado.websocket.WebSocketHandler):
         if channel:
             mc = self.get_messages_center()
             mc.add_socket(channel, self)
+            yield from self.on_open()
         else:
             io_loop = tornado.ioloop.IOLoop.current()
             io_loop.add_callback(self.on_auth_error)
@@ -54,8 +55,15 @@ class MessagesHandler(tornado.websocket.WebSocketHandler):
         """
         return
 
+    @asyncio.coroutine
+    def on_open(self):
+        """Is called on connection success.
+        """
+        pass
+
     def on_close(self):
-        """Remove handler from messages center."""
+        """Is called on connection failure.
+        """
         self.get_messages_center().del_socket(self.get_channel(), self)
 
     def on_message(self, raw_message):
